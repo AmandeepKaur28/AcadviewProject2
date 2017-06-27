@@ -1,7 +1,7 @@
 
 import requests,urllib
 
-APP_ACCESS_TOKEN = '5629236876.1cc9688.86db895c038043b5960dc2949785299a'
+APP_ACCESS_TOKEN = '2208244769.e87926e.bce7dfff59f74740912951ead09e7348'
 #Token Owner : AVinstaBot.main
 #Sandbox Users : AVinstaBot.test0, AVinstaBot.test1, AVinstaBot.test2...... AVinstaBot.test10
 
@@ -46,7 +46,7 @@ def get_user_id(insta_username):
     else:
         print 'Status code other than 200 received!'
         exit()
-get_user_id('AVinstaBot.test2')
+get_user_id('pooja_bharti_arya')
 
 '''
 Function declaration to get the info of a user by username
@@ -72,7 +72,29 @@ def get_user_info(insta_username):
     else:
         print 'Status code other than 200 received!'
 
-get_user_info('AVinstaBot.test2')
+get_user_info('pooja_bharti_arya')
+
+def get_user_info(insta_username):
+    user_id = get_user_id(insta_username)
+    if user_id == None:
+        print 'User does not exist!'
+        exit()
+    request_url = (BASE_URL + 'users/%s?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
+    print 'GET request url : %s' % (request_url)
+    user_info = requests.get(request_url).json()
+
+    if user_info['meta']['code'] == 200:
+        if len(user_info['data']):
+            print 'Username: %s' % (user_info['data']['username'])
+            print 'No. of followers: %s' % (user_info['data']['counts']['followed_by'])
+            print 'No. of people you are following: %s' % (user_info['data']['counts']['follows'])
+            print 'No. of posts: %s' % (user_info['data']['counts']['media'])
+        else:
+            print 'There is no data for this user!'
+    else:
+        print 'Status code other than 200 received!'
+
+get_user_info('pooja_bharti_arya')
 
 
 def get_own_post():
@@ -98,7 +120,7 @@ def get_user_post(insta_username):
     if user_id == None:
         print 'User does not exist!'
         exit()
-    request_url=(BASE_URL + 'users/self/media/recent/?access_token=%s') %(user_id,APP_ACCESS_TOKEN)
+    request_url=(BASE_URL + 'users/%s/media/recent/?access_token=%s') %(user_id,APP_ACCESS_TOKEN)
     user_media=requests.get(request_url).json()
     if user_media['meta']['code'] == 200:
         if len(user_media['data']):
@@ -112,7 +134,5 @@ def get_user_post(insta_username):
     else:
         print 'status code other then 200'
     return None
-print get_user_post('AVinstaBot.test2')
-
-
+print get_user_post('pooja_bharti_arya')
 
