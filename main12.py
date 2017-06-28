@@ -43,7 +43,6 @@ def get_user_id(insta_username):
     else:
         print 'Status code other than 200 received!'
         exit()
-get_user_id('pooja_bharti_arya')
 
 '''
 Function declaration to get the info of a user by username
@@ -69,8 +68,6 @@ def get_user_info(insta_username):
     else:
         print 'Status code other than 200 received!'
 
-get_user_info('pooja_bharti_arya')
-
 
 def get_own_post():
   request_url = (BASE_URL + 'users/self/media/recent/?access_token=%s') % (APP_ACCESS_TOKEN)
@@ -87,7 +84,7 @@ def get_own_post():
         print 'Post does not exist!'
   else:
      print 'Status code other than 200 received!'
-     return None
+  return None
 
 
 def get_user_post(insta_username):
@@ -109,5 +106,82 @@ def get_user_post(insta_username):
     else:
         print 'status code other then 200'
 
-print get_user_post('pooja_bharti_arya')
+def get_post_id(insta_username):
+    user_id = get_user_id(insta_username)
+    if user_id == None:
+        print 'User does not exist!'
+        exit()
+    request_url = (BASE_URL + 'users/%s/media/recent/?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
+    print 'GET request url : %s' % (request_url)
+    user_media = requests.get(request_url).json()
 
+    if user_media['meta']['code'] == 200:
+        if len(user_media['data']):
+            return user_media['data'][0]['id']
+        else:
+            print 'There is no recent post of the user!'
+            exit()
+    else:
+        print 'Status code other than 200 received!'
+        exit()
+
+def like_a_post(insta_username):
+    media_id = get_post_id(insta_username)
+    request_url=(BASE_URL + 'media/%s/likes') % (media_id)
+    payload={'access_token':APP_ACCESS_TOKEN}
+    post_a_like = requests.post(request_url, payload).json()
+    if post_a_like['meta']['code'] == 200:
+        print 'Like was successful!'
+    else:
+        print 'Your like was unsuccessful. Try again!'
+
+
+def post_a_comment(insta_username):
+    media_id = get_post_id(insta_username)
+    comment_text = raw_input("Your comment: ")
+    payload = {"access_token": APP_ACCESS_TOKEN, "text" : comment_text}
+    request_url = (BASE_URL + 'media/%s/comments') % (media_id)
+    print 'POST request url : %s' % (request_url)
+
+    make_comment = requests.post(request_url, payload).json()
+    if make_comment['meta']['code'] == 200:
+        print "Successfully added a new comment!"
+    else:
+        print "Unable to add comment. Try again!"
+
+
+def start_bot():
+    while True:
+        print '\n'
+        print 'Hey! Welcome to instaBot!'
+        print 'Here are your menu options:'
+        print "a.Get your own details\n"
+        print "b.Get details of a user by username\n"
+        print "c.Get your own recent post\n"
+        print "d.Like the recent post of a user\n"
+        print "e.Make a comment on the recent post of a user\n"
+        print "f.Exit"
+
+        choice = raw_input("Enter you choice: ")
+        if choice == "a":
+            self_info()
+        elif choice == "b":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_user_info(insta_username)
+        elif choice == "c":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_user_post(insta_username)
+        elif choice == "c":
+            get_own_post()
+        elif choice=="d":
+           insta_username = raw_input("Enter the username of the user: ")
+           like_a_post(insta_username)
+        elif choice == "e":
+            insta_username = raw_input("Enter the username of the user: ")
+            post_a_comment(insta_username)
+        elif choice == "f":
+            exit()
+        else:
+            print "wrong choice"
+
+start_bot()
