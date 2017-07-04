@@ -55,7 +55,6 @@ def get_user_info(insta_username): #Function declaration to get the info of a us
     print 'GET request url : %s' % (request_url)
     user_info = requests.get(request_url).json()
 
-
     if user_info['meta']['code'] == 200:
         if len(user_info['data']):
             print 'Username: %s' % (user_info['data']['username'])
@@ -215,6 +214,31 @@ def recent_media_liked():# this function download that image which is recently l
         print 'status code other then 200'
 
 
+# choose the post in a creative way
+# this function will allow the user to enter a username and he post no which user want to access or fetch
+def get_media_of_your_choice(insta_username):
+    user_id = get_user_id(insta_username)
+    if user_id == None:
+        print 'user does not exist'
+    request_url = (BASE_URL + 'users/%s/media/recent/?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
+    user_media = requests.get(request_url).json()
+    if user_media['meta']['code'] == 200:
+        if len(user_media['data']):
+            # here we will ask for the post number which we want to getor fetch
+            post_number = raw_input("enter no of post which you want : ")
+            # python takes input as string it must be converted to integer using int type.
+            post_number = int(post_number)
+            # list has zero based indexing do data entered must be subtracted from 1 so as to get actual data entered.
+            x = post_number - 1
+            image_name = user_media['data'][x]['id'] + '.jpeg'
+            image_url = user_media['data'][x]['images']['standard_resolution']['url']
+            urllib.urlretrieve(image_url, image_name)
+            print 'Your image has been downloaded!'
+        else:
+            print'user media does not exist'
+    else:
+        print 'status code other then 200'
+
 
 def positive_vs_negative_comment(insta_username): #this function is used to determine and count number of positive and negative comments on users post
     media_id = get_post_id(insta_username)
@@ -265,8 +289,9 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
         print "g.get list of comments on the recent post of a user\n"
         print "h.get list of likes on the recent post of a user\n"
         print "i.get recent media media liked by user\n"
-        print "j.get no of negative and positive comments on the recent post of a user\n"
-        print "k.Exit"
+        print "j.get_media_of_your_choice\n"
+        print "k.get no of negative and positive comments on the recent post of a user\n"
+        print "l.Exit"
 
         choice = raw_input("Enter you choice: ")
         if choice == "a":
@@ -295,8 +320,11 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
             recent_media_liked()
         elif choice == "j":
             insta_username = raw_input("Enter the username of the user: ")
-            positive_vs_negative_comment(insta_username)#(brar_japji)
+            get_media_of_your_choice(insta_username)
         elif choice == "k":
+            insta_username = raw_input("Enter the username of the user: ")
+            positive_vs_negative_comment(insta_username)#(brar_japji)
+        elif choice == "l":
             exit()
         else:
             print "Sorry!! wrong choice"
