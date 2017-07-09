@@ -242,7 +242,7 @@ def get_media_of_your_choice(insta_username): # brar_japji
 
             else:
 
-                print "index out of bound !! plzz enter a valid post name "
+                print "This post is not available !! Please enter a valid post number "
         else:
             print'user media does not exist'
     else:
