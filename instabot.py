@@ -1,5 +1,6 @@
 import requests,urllib # It is a Python module for fetching URLs
 import matplotlib.pyplot as plt #This is a collection of command style functions that make work like MATLAB
+import re #regular expression(re) is a special sequence of characters that helps us match or find other strings or sets of strings, using a specialized syntax held in a pattern.
 from textblob import TextBlob #Library for processing textual data
 from textblob.sentiments import NaiveBayesAnalyzer
 
@@ -150,12 +151,14 @@ def like_a_post(insta_username): # like posts of the user(brar_japji)
 def post_a_comment(insta_username): # used to add new comments on post (brar_japji)
     media_id = get_post_id(insta_username)
     comment_text = raw_input("your comment: ")
-
-    text_words = comment_text.split(" ")
-    if not any(words.islower() for words in text_words):
+    if re.search(r'[a-z]+', comment_text, re.IGNORECASE) and comment_text == comment_text.upper(): # for comment in uppercase
         print 'Sorry!! you cannot enter a comment with all capital alphabets .'
-    elif len(text_words) >= 300:
-        print "Sorry!!Your comment can't added it contains characters having length more than 300"
+    elif len(comment_text) > 300:
+        print "Sorry!!Your comment can't be added it contains characters having length more than 300"
+    elif len(re.findall(r'#[^#]+\b', comment_text, re.UNICODE | re.MULTILINE)) > 4: # for hashtags
+           print 'The comment cannot contain more than 4 hashtags.'
+    elif len(re.findall(r'\bhttps?://\S+\.\S+', comment_text)) > 1: # for comment does not contain more than one url
+        print 'The comment cannot contain more than 1 URL.'
     else:
         payload = {"access_token": APP_ACCESS_TOKEN, "text": comment_text}  # payload is used to sent data with the POST request
         request_url = (BASE_URL + 'media/%s/comments') % (media_id)
@@ -216,10 +219,10 @@ def recent_media_liked():# this function download that image which is recently l
 
 # choose the post in a creative way
 # this function will allow the user to enter a username and he post no which user want to access or fetch
-def get_media_of_your_choice(insta_username):
+def get_media_of_your_choice(insta_username): # brar_japji
     user_id = get_user_id(insta_username)
     if user_id == None:
-        print 'user does not exist'
+        print 'user does not exist!!'
     request_url = (BASE_URL + 'users/%s/media/recent/?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
     user_media = requests.get(request_url).json()
     if user_media['meta']['code'] == 200:
@@ -228,16 +231,23 @@ def get_media_of_your_choice(insta_username):
             post_number = raw_input("enter no of post which you want : ")
             # python takes input as string it must be converted to integer using int type.
             post_number = int(post_number)
+
             # list has zero based indexing do data entered must be subtracted from 1 so as to get actual data entered.
             x = post_number - 1
-            image_name = user_media['data'][x]['id'] + '.jpeg'
-            image_url = user_media['data'][x]['images']['standard_resolution']['url']
-            urllib.urlretrieve(image_url, image_name)
-            print 'Your image has been downloaded!'
+            if x < len(user_media['data']):
+                image_name = user_media['data'][x]['id'] + '.jpeg'
+                image_url = user_media['data'][x]['images']['standard_resolution']['url']
+                urllib.urlretrieve(image_url, image_name)
+                print 'Your image has been downloaded!'
+
+            else:
+
+                print "index out of bound !! plzz enter a valid post name "
         else:
             print'user media does not exist'
     else:
         print 'status code other then 200'
+
 
 
 def positive_vs_negative_comment(insta_username): #this function is used to determine and count number of positive and negative comments on users post
@@ -246,7 +256,7 @@ def positive_vs_negative_comment(insta_username): #this function is used to dete
     print 'GET request url : %s' % (request_url)
     comment_info = requests.get(request_url).json()
     count_of_positive_comments=0  #initially no of  comments are zero
-    count_of_negative_comments = 0
+    count_of_negative_comments =0
 
     if comment_info['meta']['code'] == 200:
         if len(comment_info['data']):
@@ -296,36 +306,72 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
         choice = raw_input("Enter you choice: ")
         if choice == "a":
             self_info()
+
         elif choice == "b":
             insta_username = raw_input("Enter the username of the user: ")
-            get_user_info(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                get_user_info(insta_username)  # (brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "c":
             insta_username = raw_input("Enter the username of the user: ")
-            get_user_post(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                get_user_post(insta_username)#(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "d":
             get_own_post()
+
         elif choice == "e":
             insta_username = raw_input("Enter the username of the user: ")
-            like_a_post(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                like_a_post(insta_username)#(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "f":
             insta_username = raw_input("Enter the username of the user: ")
-            post_a_comment(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                post_a_comment(insta_username)#(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "g":
             insta_username = raw_input("Enter the username of the user: ")
-            list_of_comments(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                list_of_comments(insta_username)#(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "h":
             insta_username = raw_input("Enter the username of the user: ")
-            list_of_likes(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                list_of_likes(insta_username)  #(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "i":
             recent_media_liked()
+
         elif choice == "j":
             insta_username = raw_input("Enter the username of the user: ")
-            get_media_of_your_choice(insta_username)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                get_media_of_your_choice(insta_username) #(brar_japji)
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "k":
             insta_username = raw_input("Enter the username of the user: ")
-            positive_vs_negative_comment(insta_username)#(brar_japji)
+            if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
+                positive_vs_negative_comment(insta_username)  # (brar_japji
+            else:
+                print "Sorry!! Add user_name whose information you want to get"
+
         elif choice == "l":
             exit()
+
         else:
             print "Sorry!! wrong choice"
 
