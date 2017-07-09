@@ -153,9 +153,9 @@ def post_a_comment(insta_username): # used to add new comments on post (brar_jap
     comment_text = raw_input("your comment: ")
     if re.search(r'[a-z]+', comment_text, re.IGNORECASE) and comment_text == comment_text.upper(): # for comment in uppercase
         print 'Sorry!! you cannot enter a comment with all capital alphabets .'
-    elif len(comment_text) > 300:
+    elif len(comment_text) > 300: # this is for comment does not contain more than 300 characters
         print "Sorry!!Your comment can't be added it contains characters having length more than 300"
-    elif len(re.findall(r'#[^#]+\b', comment_text, re.UNICODE | re.MULTILINE)) > 4: # for hashtags
+    elif len(re.findall(r'#[^#]+\b', comment_text, re.UNICODE | re.MULTILINE)) > 4: # for hashtags ,condition for hashtags that comment can't contain more than four url
            print 'The comment cannot contain more than 4 hashtags.'
     elif len(re.findall(r'\bhttps?://\S+\.\S+', comment_text)) > 1: # for comment does not contain more than one url
         print 'The comment cannot contain more than 1 URL.'
