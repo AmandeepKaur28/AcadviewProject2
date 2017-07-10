@@ -310,16 +310,23 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
         elif choice == "b":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                get_user_info(insta_username)  # (brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    get_user_info(insta_username)  # (brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
+
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "c":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                get_user_post(insta_username)#(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    get_user_post(insta_username)#(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "d":
             get_own_post()
@@ -327,30 +334,42 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
         elif choice == "e":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                like_a_post(insta_username)#(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    like_a_post(insta_username)#(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "f":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                post_a_comment(insta_username)#(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    post_a_comment(insta_username)#(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "g":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                list_of_comments(insta_username)#(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    list_of_comments(insta_username)#(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "h":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                list_of_likes(insta_username)  #(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    list_of_likes(insta_username)  #(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "i":
             recent_media_liked()
@@ -358,16 +377,22 @@ def start_bot():#start_bot function provides choice menu to call differnt functi
         elif choice == "j":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                get_media_of_your_choice(insta_username) #(brar_japji)
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    get_media_of_your_choice(insta_username) #(brar_japji)
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "k":
             insta_username = raw_input("Enter the username of the user: ")
             if len(insta_username)> 0 and insta_username.isspace() == False and insta_username.isdigit()==False:
-                positive_vs_negative_comment(insta_username)  # (brar_japji
+                if not set('[~!@#$%^&*()+{}":;\']" "').intersection(insta_username):
+                    positive_vs_negative_comment(insta_username)  # (brar_japji
+                else:
+                    print "Sorry!! Add user_name whose information you want to get"
             else:
-                print "Sorry!! Add user_name whose information you want to get"
+                print "Please enter valid username"
 
         elif choice == "l":
             exit()
